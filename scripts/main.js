@@ -5,7 +5,6 @@ const scrollSections = Array.from(document.querySelectorAll('section[data-scroll
 const revealTargets = Array.from(document.querySelectorAll('[data-reveal]'));
 const heroSection = document.querySelector('.hero');
 const imageStorySection = document.querySelector('.image-story');
-const footerSomos = document.querySelector('.footer-somos');
 const momentsGrid = document.querySelector('.moments-grid');
 const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 const hoverPreviewQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -207,28 +206,6 @@ const showMomentsPreview = (tile) => {
   animatePreviewToRect(tile, originRect, centeredRect);
 };
 
-const fitFooterSomos = () => {
-  if (!footerSomos) {
-    return;
-  }
-
-  footerSomos.style.removeProperty('--footer-somos-size');
-
-  const styles = window.getComputedStyle(footerSomos);
-  const currentSize = parseFloat(styles.fontSize) || 16;
-  const paddingInline = (parseFloat(styles.paddingLeft) || 0) + (parseFloat(styles.paddingRight) || 0);
-  const viewportWidth = document.documentElement.clientWidth;
-  const availableWidth = Math.max(0, viewportWidth - paddingInline);
-  const measuredWidth = footerSomos.scrollWidth;
-
-  if (availableWidth <= 0 || measuredWidth <= 0) {
-    return;
-  }
-
-  const fittedSize = clamp(currentSize * (availableWidth / measuredWidth), 42, 420);
-  footerSomos.style.setProperty('--footer-somos-size', `${fittedSize.toFixed(2)}px`);
-};
-
 const setActiveLink = (id) => {
   topLinks.forEach((link) => {
     const isActive = link.getAttribute('href') === `#${id}`;
@@ -385,7 +362,6 @@ window.addEventListener('scroll', onScroll, { passive: true });
 window.addEventListener('resize', () => {
   hideMomentsPreview(true);
   onScroll();
-  fitFooterSomos();
 });
 
 const onMotionPreferenceChange = () => {
@@ -411,10 +387,3 @@ if (typeof hoverPreviewQuery.addEventListener === 'function') {
 }
 
 updateScrollEffects();
-fitFooterSomos();
-
-if (document.fonts && document.fonts.ready && typeof document.fonts.ready.then === 'function') {
-  document.fonts.ready.then(() => {
-    fitFooterSomos();
-  });
-}
