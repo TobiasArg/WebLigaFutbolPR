@@ -7,16 +7,22 @@ if (yearNode) {
 }
 
 if (menuButton && mainNav) {
+  const setMenuState = (isOpen) => {
+    menuButton.setAttribute('aria-expanded', String(isOpen));
+    menuButton.setAttribute('aria-label', isOpen ? 'Cerrar menu' : 'Abrir menu');
+    mainNav.classList.toggle('is-open', isOpen);
+  };
+
   menuButton.addEventListener('click', () => {
     const expanded = menuButton.getAttribute('aria-expanded') === 'true';
-    menuButton.setAttribute('aria-expanded', String(!expanded));
-    mainNav.classList.toggle('is-open', !expanded);
+    setMenuState(!expanded);
   });
 
   mainNav.querySelectorAll('a').forEach((link) => {
     link.addEventListener('click', () => {
-      menuButton.setAttribute('aria-expanded', 'false');
-      mainNav.classList.remove('is-open');
+      setMenuState(false);
     });
   });
+
+  setMenuState(false);
 }
