@@ -33,8 +33,8 @@
             <a class="brand" href="#inicio">LigaPR</a>
             <nav class="top-nav" aria-label="Navegacion principal">
               <a href="#identidad">Identidad</a>
-              <a href="#competicion">Competicion</a>
-              <a href="#formato">Formato</a>
+              <a href="#aficion">Aficion</a>
+              <a href="#competicion">Momentos</a>
               <a href="#contacto">Contacto</a>
             </nav>
           </div>
@@ -48,7 +48,7 @@
             </p>
             <div class="hero-links">
               <a href="#contacto">Inscribir equipo</a>
-              <a href="#competicion">Ver calendario</a>
+              <a href="#competicion">Ver momentos</a>
             </div>
           </div>
         </div>
@@ -75,39 +75,72 @@
         </div>
       </section>
 
-      <section id="competicion" class="section" data-scroll-section>
-        <div class="container" data-reveal>
-          <h2>Competicion</h2>
-          <p>
-            Jornadas semanales para distintas categorias, con tabla actualizada y seguimiento de
-            rendimiento por equipo.
-          </p>
-          <ul class="plain-list">
-            <li>Partidos oficiales por region.</li>
-            <li>Calendario unificado para toda la liga.</li>
-            <li>Estadisticas de equipos y jugadores.</li>
-          </ul>
-        </div>
-      </section>
-
-      <section id="formato" class="section" data-scroll-section>
-        <div class="container" data-reveal>
-          <h2>Formato de temporada</h2>
-          <p>
-            Registro de clubes, fase regular y playoffs. Un esquema claro para jugar toda la temporada
-            con orden y competitividad.
-          </p>
-          <ol class="plain-list">
-            <li>Inscripcion por zona y categoria.</li>
-            <li>Fase regular con ranking.</li>
-            <li>Eliminacion directa hasta la final.</li>
-          </ol>
+      <section id="competicion" class="moments-section" aria-labelledby="moments-title" data-scroll-section>
+        <div class="container moments-wrap" data-reveal>
+          <p class="moments-kicker">Galeria LigaPR</p>
+          <h2 id="moments-title" class="moments-title">Momentos donde SOMOS</h2>
+          <div class="moments-grid" aria-label="Bento grid de momentos de LigaPR">
+            <figure class="moments-tile moments-tile-1">
+              <img
+                src="assets/bento1.png"
+                alt="Gradas llenas con banderas de Puerto Rico durante un partido al atardecer."
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+            <figure class="moments-tile moments-tile-2">
+              <img
+                src="assets/bento3.png"
+                alt="Choque por el balon entre dos jugadores en una jugada de alta intensidad."
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+            <figure class="moments-tile moments-tile-3">
+              <img
+                src="assets/bento4.png"
+                alt="Vista aerea del estadio lleno durante una jornada oficial en Puerto Rico."
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+            <figure class="moments-tile moments-tile-4">
+              <img
+                src="assets/bento2.png"
+                alt="Padre e hija celebrando con la bandera de Puerto Rico en la comunidad."
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+          </div>
         </div>
       </section>
     </main>
 
     <footer id="contacto" class="site-footer" data-scroll-section>
       <p class="footer-somos" data-reveal aria-label="Somos">SOMOS</p>
+      <div class="under-footer container">
+        <div class="under-footer-block">
+          <p class="under-footer-title">LigaPR</p>
+          <p class="under-footer-copy">© <span id="current-year"></span> LigaPR. Todos los derechos reservados.</p>
+        </div>
+
+        <div class="under-footer-block">
+          <p class="under-footer-title">Redes</p>
+          <nav class="under-footer-links" aria-label="Redes sociales">
+            <a href="https://instagram.com" target="_blank" rel="noreferrer noopener">Instagram</a>
+            <a href="https://facebook.com" target="_blank" rel="noreferrer noopener">Facebook</a>
+            <a href="https://x.com" target="_blank" rel="noreferrer noopener">X</a>
+            <a href="https://youtube.com" target="_blank" rel="noreferrer noopener">YouTube</a>
+          </nav>
+        </div>
+
+        <div class="under-footer-block">
+          <p class="under-footer-title">Contacto</p>
+          <a class="under-footer-mail" href="mailto:liga@webliga.pr">liga@webliga.pr</a>
+          <a class="under-footer-mail" href="tel:+17875550108">+1 (787) 555-0108</a>
+        </div>
+      </div>
     </footer>
 
     <script src="scripts/main.js"></script>

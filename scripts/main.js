@@ -5,8 +5,15 @@ const scrollSections = Array.from(document.querySelectorAll('section[data-scroll
 const revealTargets = Array.from(document.querySelectorAll('[data-reveal]'));
 const heroSection = document.querySelector('.hero');
 const imageStorySection = document.querySelector('.image-story');
+const footerSomos = document.querySelector('.footer-somos');
+const bentoTiles = Array.from(document.querySelectorAll('.moments-grid .moments-tile'));
 const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+const hoverPreviewQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
 let reduceMotion = motionQuery.matches;
+let previewBackdrop = null;
+let previewImage = null;
+let previewActiveTile = null;
+let previewTimer = 0;
 
 if (yearNode) {
   yearNode.textContent = new Date().getFullYear();
@@ -30,6 +37,175 @@ const applyMotionMode = () => {
 applyMotionMode();
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+const clearPreviewTimer = () => {
+  if (!previewTimer) {
+    return;
+  }
+
+  window.clearTimeout(previewTimer);
+  previewTimer = 0;
+};
+
+const ensureMomentsPreviewNodes = () => {
+  if (previewBackdrop && previewImage) {
+    return;
+  }
+
+  previewBackdrop = document.createElement('div');
+  previewBackdrop.className = 'moments-preview-backdrop';
+  previewBackdrop.setAttribute('aria-hidden', 'true');
+
+  previewImage = document.createElement('img');
+  previewImage.className = 'moments-preview-image';
+  previewImage.setAttribute('aria-hidden', 'true');
+  previewImage.decoding = 'async';
+
+  document.body.append(previewBackdrop, previewImage);
+};
+
+const getTileImage = (tile) => tile?.querySelector('img') || null;
+
+const getTileImageRect = (tile) => {
+  const image = getTileImage(tile);
+
+  if (!image) {
+    return null;
+  }
+
+  return image.getBoundingClientRect();
+};
+
+const applyPreviewRect = (rect) => {
+  if (!previewImage || !rect) {
+    return;
+  }
+
+  previewImage.style.left = `${rect.left}px`;
+  previewImage.style.top = `${rect.top}px`;
+  previewImage.style.width = `${rect.width}px`;
+  previewImage.style.height = `${rect.height}px`;
+};
+
+const getCenteredPreviewRect = (originRect) => {
+  const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 1;
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight || 1;
+  const growthFactor = 1.3;
+  let width = originRect.width * growthFactor;
+  let height = originRect.height * growthFactor;
+
+  const fitFactor = Math.min(1, (viewportWidth * 0.92) / width, (viewportHeight * 0.88) / height);
+  width *= fitFactor;
+  height *= fitFactor;
+
+  return {
+    width,
+    height,
+    left: (viewportWidth - width) * 0.5,
+    top: (viewportHeight - height) * 0.5,
+  };
+};
+
+const cleanupMomentsPreview = () => {
+  if (!previewImage || !previewBackdrop) {
+    return;
+  }
+
+  previewImage.classList.remove('is-active');
+  previewBackdrop.classList.remove('is-active');
+  previewImage.removeAttribute('src');
+  previewImage.removeAttribute('alt');
+};
+
+const hideMomentsPreview = (instant = false) => {
+  if (!previewActiveTile || !previewImage || !previewBackdrop) {
+    return;
+  }
+
+  clearPreviewTimer();
+
+  const activeTile = previewActiveTile;
+  const originRect = getTileImageRect(activeTile);
+  activeTile.classList.remove('is-preview-origin');
+  previewActiveTile = null;
+  previewBackdrop.classList.remove('is-active');
+
+  if (instant || reduceMotion || !originRect) {
+    cleanupMomentsPreview();
+    return;
+  }
+
+  applyPreviewRect(originRect);
+
+  previewTimer = window.setTimeout(() => {
+    cleanupMomentsPreview();
+    clearPreviewTimer();
+  }, 600);
+};
+
+const showMomentsPreview = (tile) => {
+  if (!hoverPreviewQuery.matches || !tile) {
+    return;
+  }
+
+  const image = getTileImage(tile);
+
+  if (!image) {
+    return;
+  }
+
+  ensureMomentsPreviewNodes();
+  clearPreviewTimer();
+
+  if (previewActiveTile && previewActiveTile !== tile) {
+    previewActiveTile.classList.remove('is-preview-origin');
+  }
+
+  previewActiveTile = tile;
+  tile.classList.add('is-preview-origin');
+
+  const originRect = image.getBoundingClientRect();
+  const centeredRect = getCenteredPreviewRect(originRect);
+
+  previewImage.src = image.currentSrc || image.src;
+  previewImage.alt = image.alt || '';
+  previewImage.style.objectPosition = window.getComputedStyle(image).objectPosition;
+
+  applyPreviewRect(originRect);
+  previewImage.classList.add('is-active');
+  previewBackdrop.classList.add('is-active');
+
+  if (reduceMotion) {
+    applyPreviewRect(centeredRect);
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    applyPreviewRect(centeredRect);
+  });
+};
+
+const fitFooterSomos = () => {
+  if (!footerSomos) {
+    return;
+  }
+
+  footerSomos.style.removeProperty('--footer-somos-size');
+
+  const styles = window.getComputedStyle(footerSomos);
+  const currentSize = parseFloat(styles.fontSize) || 16;
+  const paddingInline = (parseFloat(styles.paddingLeft) || 0) + (parseFloat(styles.paddingRight) || 0);
+  const viewportWidth = document.documentElement.clientWidth;
+  const availableWidth = Math.max(0, viewportWidth - paddingInline);
+  const measuredWidth = footerSomos.scrollWidth;
+
+  if (availableWidth <= 0 || measuredWidth <= 0) {
+    return;
+  }
+
+  const fittedSize = clamp(currentSize * (availableWidth / measuredWidth), 42, 420);
+  footerSomos.style.setProperty('--footer-somos-size', `${fittedSize.toFixed(2)}px`);
+};
 
 const setActiveLink = (id) => {
   topLinks.forEach((link) => {
@@ -63,6 +239,24 @@ if (revealTargets.length > 0) {
 
     revealTargets.forEach((target) => revealObserver.observe(target));
   }
+}
+
+if (bentoTiles.length > 0) {
+  bentoTiles.forEach((tile) => {
+    tile.addEventListener('pointerenter', () => {
+      showMomentsPreview(tile);
+    });
+
+    tile.addEventListener('pointerleave', () => {
+      hideMomentsPreview();
+    });
+  });
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      hideMomentsPreview(true);
+    }
+  });
 }
 
 const updateScrollEffects = () => {
@@ -112,6 +306,10 @@ const updateScrollEffects = () => {
 let ticking = false;
 
 const onScroll = () => {
+  if (previewActiveTile) {
+    hideMomentsPreview(true);
+  }
+
   if (ticking) {
     return;
   }
@@ -124,9 +322,14 @@ const onScroll = () => {
 };
 
 window.addEventListener('scroll', onScroll, { passive: true });
-window.addEventListener('resize', onScroll);
+window.addEventListener('resize', () => {
+  hideMomentsPreview(true);
+  onScroll();
+  fitFooterSomos();
+});
 
 const onMotionPreferenceChange = () => {
+  hideMomentsPreview(true);
   applyMotionMode();
   updateScrollEffects();
 };
@@ -137,4 +340,21 @@ if (typeof motionQuery.addEventListener === 'function') {
   motionQuery.addListener(onMotionPreferenceChange);
 }
 
+if (typeof hoverPreviewQuery.addEventListener === 'function') {
+  hoverPreviewQuery.addEventListener('change', () => {
+    hideMomentsPreview(true);
+  });
+} else if (typeof hoverPreviewQuery.addListener === 'function') {
+  hoverPreviewQuery.addListener(() => {
+    hideMomentsPreview(true);
+  });
+}
+
 updateScrollEffects();
+fitFooterSomos();
+
+if (document.fonts && document.fonts.ready && typeof document.fonts.ready.then === 'function') {
+  document.fonts.ready.then(() => {
+    fitFooterSomos();
+  });
+}
