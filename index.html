@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebLiga Futbol - Landing</title>
+    <meta
+      name="description"
+      content="Base de landing page para presentar tu producto de forma clara, moderna y adaptable a movil."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/main.css" />
+  </head>
+  <body>
+    <div class="bg-glow bg-glow-a" aria-hidden="true"></div>
+    <div class="bg-glow bg-glow-b" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <div class="container nav-wrap">
+        <a class="brand" href="#">WebLiga</a>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav">
+          Menu
+        </button>
+        <nav id="main-nav" class="main-nav" aria-label="Navegacion principal">
+          <a href="#beneficios">Beneficios</a>
+          <a href="#como-funciona">Como funciona</a>
+          <a href="#contacto">Contacto</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero section container">
+        <p class="eyebrow">Plantilla inicial lista para crecer</p>
+        <h1>Lanza tu landing en minutos, no en semanas.</h1>
+        <p class="hero-copy">
+          Esta base te da una estructura limpia, responsive y facil de personalizar para tu producto.
+          Ideal para validar ideas rapido y convertir visitas en oportunidades.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#contacto">Comenzar ahora</a>
+          <a class="btn btn-ghost" href="#beneficios">Ver beneficios</a>
+        </div>
+      </section>
+
+      <section id="beneficios" class="section container">
+        <h2>Beneficios clave</h2>
+        <div class="cards">
+          <article class="card">
+            <h3>Estructura escalable</h3>
+            <p>Separacion clara entre HTML, CSS y JS para que puedas iterar sin caos.</p>
+          </article>
+          <article class="card">
+            <h3>Diseno responsive</h3>
+            <p>Se adapta a movil y desktop desde el primer dia, sin ajustes urgentes luego.</p>
+          </article>
+          <article class="card">
+            <h3>Base profesional</h3>
+            <p>Tipografia, color y ritmo visual cuidados para evitar una apariencia generica.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="como-funciona" class="section container split">
+        <div>
+          <h2>Como funciona</h2>
+          <ol>
+            <li>Personaliza textos, colores y llamados a la accion.</li>
+            <li>Conecta formulario o analitica segun tu stack.</li>
+            <li>Publica y empieza a medir conversiones.</li>
+          </ol>
+        </div>
+        <aside class="highlight" aria-label="Dato destacado">
+          <p class="highlight-title">Tip rapido</p>
+          <p>Empieza con una propuesta de valor clara en la primera pantalla y un CTA visible.</p>
+        </aside>
+      </section>
+    </main>
+
+    <footer id="contacto" class="site-footer">
+      <div class="container footer-wrap">
+        <p>Listo para tu siguiente iteracion.</p>
+        <a class="btn btn-primary" href="mailto:hola@webliga.dev">hola@webliga.dev</a>
+      </div>
+      <p class="copyright">© <span id="current-year"></span> WebLiga. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="scripts/main.js"></script>
+  </body>
+</html>
