@@ -6,7 +6,7 @@ const revealTargets = Array.from(document.querySelectorAll('[data-reveal]'));
 const heroSection = document.querySelector('.hero');
 const imageStorySection = document.querySelector('.image-story');
 const footerSomos = document.querySelector('.footer-somos');
-const bentoTiles = Array.from(document.querySelectorAll('.moments-grid .moments-tile'));
+const momentsGrid = document.querySelector('.moments-grid');
 const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 const hoverPreviewQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
 let reduceMotion = motionQuery.matches;
@@ -76,15 +76,43 @@ const getTileImageRect = (tile) => {
   return image.getBoundingClientRect();
 };
 
-const applyPreviewRect = (rect) => {
+const setPreviewBaseSize = (rect) => {
   if (!previewImage || !rect) {
     return;
   }
 
-  previewImage.style.left = `${rect.left}px`;
-  previewImage.style.top = `${rect.top}px`;
   previewImage.style.width = `${rect.width}px`;
   previewImage.style.height = `${rect.height}px`;
+};
+
+const applyPreviewTransform = (originRect, targetRect) => {
+  if (!previewImage || !originRect || !targetRect) {
+    return;
+  }
+
+  const safeOriginWidth = Math.max(originRect.width, 1);
+  const scale = targetRect.width / safeOriginWidth;
+  previewImage.style.transform = `translate3d(${targetRect.left}px, ${targetRect.top}px, 0) scale(${scale})`;
+};
+
+const animatePreviewToRect = (tile, originRect, targetRect) => {
+  if (!previewImage || !originRect || !targetRect) {
+    return;
+  }
+
+  window.requestAnimationFrame(() => {
+    if (previewActiveTile !== tile || !previewImage.classList.contains('is-active')) {
+      return;
+    }
+
+    window.requestAnimationFrame(() => {
+      if (previewActiveTile !== tile || !previewImage.classList.contains('is-active')) {
+        return;
+      }
+
+      applyPreviewTransform(originRect, targetRect);
+    });
+  });
 };
 
 const getCenteredPreviewRect = (originRect) => {
@@ -126,7 +154,6 @@ const hideMomentsPreview = (instant = false) => {
 
   const activeTile = previewActiveTile;
   const originRect = getTileImageRect(activeTile);
-  activeTile.classList.remove('is-preview-origin');
   previewActiveTile = null;
   previewBackdrop.classList.remove('is-active');
 
@@ -135,7 +162,8 @@ const hideMomentsPreview = (instant = false) => {
     return;
   }
 
-  applyPreviewRect(originRect);
+  setPreviewBaseSize(originRect);
+  applyPreviewTransform(originRect, originRect);
 
   previewTimer = window.setTimeout(() => {
     cleanupMomentsPreview();
@@ -157,12 +185,7 @@ const showMomentsPreview = (tile) => {
   ensureMomentsPreviewNodes();
   clearPreviewTimer();
 
-  if (previewActiveTile && previewActiveTile !== tile) {
-    previewActiveTile.classList.remove('is-preview-origin');
-  }
-
   previewActiveTile = tile;
-  tile.classList.add('is-preview-origin');
 
   const originRect = image.getBoundingClientRect();
   const centeredRect = getCenteredPreviewRect(originRect);
@@ -171,18 +194,17 @@ const showMomentsPreview = (tile) => {
   previewImage.alt = image.alt || '';
   previewImage.style.objectPosition = window.getComputedStyle(image).objectPosition;
 
-  applyPreviewRect(originRect);
+  setPreviewBaseSize(originRect);
+  applyPreviewTransform(originRect, originRect);
   previewImage.classList.add('is-active');
   previewBackdrop.classList.add('is-active');
 
   if (reduceMotion) {
-    applyPreviewRect(centeredRect);
+    applyPreviewTransform(originRect, centeredRect);
     return;
   }
 
-  window.requestAnimationFrame(() => {
-    applyPreviewRect(centeredRect);
-  });
+  animatePreviewToRect(tile, originRect, centeredRect);
 };
 
 const fitFooterSomos = () => {
@@ -241,15 +263,53 @@ if (revealTargets.length > 0) {
   }
 }
 
-if (bentoTiles.length > 0) {
-  bentoTiles.forEach((tile) => {
-    tile.addEventListener('pointerenter', () => {
-      showMomentsPreview(tile);
-    });
+if (momentsGrid) {
+  momentsGrid.addEventListener('pointerover', (event) => {
+    if (!hoverPreviewQuery.matches) {
+      return;
+    }
 
-    tile.addEventListener('pointerleave', () => {
+    const target = event.target;
+
+    if (!(target instanceof Element)) {
+      return;
+    }
+
+    const tile = target.closest('.moments-tile');
+
+    if (!tile || !momentsGrid.contains(tile) || tile === previewActiveTile) {
+      return;
+    }
+
+    showMomentsPreview(tile);
+  });
+
+  momentsGrid.addEventListener('pointerout', (event) => {
+    const target = event.target;
+
+    if (!(target instanceof Element)) {
+      return;
+    }
+
+    const tile = target.closest('.moments-tile');
+
+    if (!tile || !momentsGrid.contains(tile)) {
+      return;
+    }
+
+    const related = event.relatedTarget;
+
+    if (related instanceof Element) {
+      const nextTile = related.closest('.moments-tile');
+
+      if (nextTile && momentsGrid.contains(nextTile)) {
+        return;
+      }
+    }
+
+    if (previewActiveTile === tile) {
       hideMomentsPreview();
-    });
+    }
   });
 
   window.addEventListener('keydown', (event) => {

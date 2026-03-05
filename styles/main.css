@@ -423,6 +423,7 @@ html.motion-safe [data-reveal].is-visible {
 .moments-tile {
   position: relative;
   isolation: isolate;
+  contain: paint;
   margin: 0;
   border-radius: 0.78rem;
   overflow: hidden;
@@ -520,6 +521,7 @@ html.motion-safe [data-reveal].is-visible {
   background: rgba(0, 0, 0, 0.44);
   opacity: 0;
   pointer-events: none;
+  will-change: opacity;
   transition: opacity 340ms var(--ease-standard);
   z-index: 24;
 }
@@ -530,18 +532,20 @@ html.motion-safe [data-reveal].is-visible {
 
 .moments-preview-image {
   position: fixed;
+  left: 0;
+  top: 0;
   margin: 0;
   border-radius: 0.78rem;
   object-fit: cover;
   object-position: center;
+  transform-origin: top left;
+  transform: translate3d(0, 0, 0) scale(1);
   box-shadow: 0 20px 48px rgba(0, 0, 0, 0.34);
   pointer-events: none;
   opacity: 0;
+  will-change: transform, opacity;
   transition:
-    left 560ms cubic-bezier(0.2, 0.72, 0.2, 1),
-    top 560ms cubic-bezier(0.2, 0.72, 0.2, 1),
-    width 560ms cubic-bezier(0.2, 0.72, 0.2, 1),
-    height 560ms cubic-bezier(0.2, 0.72, 0.2, 1),
+    transform 560ms cubic-bezier(0.2, 0.72, 0.2, 1),
     opacity 260ms var(--ease-standard);
   z-index: 25;
 }
@@ -815,6 +819,22 @@ h2 {
     transition: none;
     transform: none;
     filter: none;
+  }
+
+  [data-reveal] {
     opacity: 1;
+  }
+
+  .moments-preview-backdrop {
+    opacity: 0;
+  }
+
+  .moments-preview-backdrop.is-active,
+  .moments-preview-image.is-active {
+    opacity: 1;
+  }
+
+  .moments-preview-image {
+    opacity: 0;
   }
 }
