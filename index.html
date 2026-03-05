@@ -17,99 +17,99 @@
     <link rel="stylesheet" href="styles/main.css" />
   </head>
   <body>
-    <header class="site-header">
-      <div class="container nav-wrap">
-        <a class="brand" href="#inicio">LigaPR</a>
-        <button
-          class="menu-toggle"
-          type="button"
-          aria-label="Abrir menu"
-          aria-expanded="false"
-          aria-controls="main-nav"
-        >
-          Menu
-        </button>
-        <nav id="main-nav" class="main-nav" aria-label="Navegacion principal">
-          <a href="#inicio">Inicio</a>
-          <a href="#competicion">Competicion</a>
-          <a href="#formato">Formato</a>
-          <a href="#contacto" class="nav-join">Unete ahora</a>
-        </nav>
+    <main id="main" class="scroll-scene" data-scroll-root>
+      <div class="scene-bg" aria-hidden="true">
+        <div class="scene-gradient"></div>
       </div>
-    </header>
 
-    <main>
-      <section id="inicio" class="hero">
-        <div class="container hero-grid">
-          <div class="hero-main">
-            <div class="member-row" aria-label="Jugadores activos en la liga">
-              <div class="member-avatars" aria-hidden="true">
-                <span class="avatar">JR</span>
-                <span class="avatar">LV</span>
-                <span class="avatar">AM</span>
-                <span class="avatar">CP</span>
-              </div>
-              <p class="member-copy"><strong>1,200+</strong> Jugadores activos</p>
-            </div>
-            <h1>Pases, goles y orgullo boricua.</h1>
+      <section id="inicio" class="hero" data-scroll-section>
+        <video class="hero-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
+          <source src="assets/LandingVideoLigaPR.mp4" type="video/mp4" />
+        </video>
+        <div class="hero-overlay" aria-hidden="true"></div>
+
+        <div class="container hero-layer">
+          <div class="hero-top" data-reveal>
+            <a class="brand" href="#inicio">LigaPR</a>
+            <nav class="top-nav" aria-label="Navegacion principal">
+              <a href="#identidad">Identidad</a>
+              <a href="#competicion">Competicion</a>
+              <a href="#formato">Formato</a>
+              <a href="#contacto">Contacto</a>
+            </nav>
           </div>
 
-          <div class="hero-side">
+          <div class="hero-bottom" data-reveal>
+            <p class="hero-kicker">1,200+ jugadores activos</p>
+            <h1>La Liga de Futbol de Puerto Rico.</h1>
             <p class="hero-copy">
-              La Liga de Futbol de Puerto Rico conecta clubes, jugadores y fanaticos en una sola
-              temporada: torneos organizados, jornadas semanales y una comunidad que juega con nivel.
+              Futbol organizado para clubes y jugadores de toda la isla: calendario oficial,
+              resultados en vivo y competencia real durante toda la temporada.
             </p>
-            <div class="hero-actions">
-              <a class="btn btn-primary" href="#contacto">Inscribir mi equipo</a>
-              <a class="btn btn-ghost" href="#competicion">Ver calendario</a>
+            <div class="hero-links">
+              <a href="#contacto">Inscribir equipo</a>
+              <a href="#competicion">Ver calendario</a>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="competicion" class="section section-light">
-        <div class="container">
-          <h2>Una liga hecha para competir y crecer.</h2>
-          <div class="cards">
-            <article class="card">
-              <h3>Torneos por categorias</h3>
-              <p>Formato claro para equipos amateur, semipro y desarrollo juvenil.</p>
-            </article>
-            <article class="card">
-              <h3>Calendario centralizado</h3>
-              <p>Resultados, horarios y tablas en un solo lugar para toda la isla.</p>
-            </article>
-            <article class="card">
-              <h3>Visibilidad para clubes</h3>
-              <p>Difusion digital para atraer talento, patrocinadores y nueva fanaticada.</p>
-            </article>
+      <section id="identidad" class="transition-legend" aria-labelledby="identidad-claim" data-scroll-section>
+        <h2 id="identidad-claim" class="transition-legend-text">SOMOS NOSOTROS. SOMOS PUERTO RICO.</h2>
+      </section>
+
+      <section id="aficion" class="image-story" aria-labelledby="aficion-title" data-scroll-section>
+        <img
+          class="image-story-media"
+          src="assets/LigaPRAficion.png"
+          alt="Aficion de Puerto Rico celebrando en la grada durante un partido de futbol."
+          decoding="async"
+        />
+        <div class="image-story-overlay" aria-hidden="true"></div>
+        <div class="container image-story-layer">
+          <div class="image-story-content" data-reveal>
+            <p class="image-story-kicker">LigaPR</p>
+            <h2 id="aficion-title">La grada tambien juega.</h2>
+            <p class="image-story-copy">Futbol de barrio, isla y seleccion: una sola voz en cada fecha.</p>
           </div>
         </div>
       </section>
 
-      <section id="formato" class="section section-muted">
-        <div class="container format-grid">
-          <div>
-            <h2>Como vive la temporada</h2>
-            <ol>
-              <li>Registro de equipos y jugadores por zona.</li>
-              <li>Fase regular con jornadas semanales y ranking actualizado.</li>
-              <li>Playoffs con eliminacion directa hasta la final nacional.</li>
-            </ol>
-          </div>
-          <aside class="highlight" aria-label="Dato destacado">
-            <p class="highlight-title">Dato de competencia</p>
-            <p class="highlight-value">18</p>
-            <p class="highlight-copy">Municipios representados en la ultima edicion de la liga.</p>
-          </aside>
+      <section id="competicion" class="section" data-scroll-section>
+        <div class="container" data-reveal>
+          <h2>Competicion</h2>
+          <p>
+            Jornadas semanales para distintas categorias, con tabla actualizada y seguimiento de
+            rendimiento por equipo.
+          </p>
+          <ul class="plain-list">
+            <li>Partidos oficiales por region.</li>
+            <li>Calendario unificado para toda la liga.</li>
+            <li>Estadisticas de equipos y jugadores.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="formato" class="section" data-scroll-section>
+        <div class="container" data-reveal>
+          <h2>Formato de temporada</h2>
+          <p>
+            Registro de clubes, fase regular y playoffs. Un esquema claro para jugar toda la temporada
+            con orden y competitividad.
+          </p>
+          <ol class="plain-list">
+            <li>Inscripcion por zona y categoria.</li>
+            <li>Fase regular con ranking.</li>
+            <li>Eliminacion directa hasta la final.</li>
+          </ol>
         </div>
       </section>
     </main>
 
-    <footer id="contacto" class="site-footer">
+    <footer id="contacto" class="site-footer" data-scroll-section>
       <div class="container footer-wrap">
-        <p>Listos para la proxima temporada en Puerto Rico.</p>
-        <a class="btn btn-primary" href="mailto:liga@webliga.pr">liga@webliga.pr</a>
+        <p>Listos para la proxima temporada.</p>
+        <a href="mailto:liga@webliga.pr">liga@webliga.pr</a>
       </div>
       <p class="copyright">© <span id="current-year"></span> LigaPR. Todos los derechos reservados.</p>
     </footer>
